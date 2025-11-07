@@ -1,4 +1,4 @@
-use mongodb::{Client, Database, option::ClientOptions};
+use mongodb::{Client, Database, options::ClientOptions};
 use anyhow::Result;
 
 pub struct MongoConnector {

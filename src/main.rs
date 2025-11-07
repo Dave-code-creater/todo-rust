@@ -1,8 +1,9 @@
 mod api;
+mod db;
 mod models;
 mod repository;
 
-use actix_web::{App,HttpResponse,  HttpServer, Responder, get, middleware::Logger, web::{self, Data}};
+use actix_web::{App, HttpResponse, HttpServer, Responder, get};
 
 #[get("/")]
 async fn hello() -> impl Responder {

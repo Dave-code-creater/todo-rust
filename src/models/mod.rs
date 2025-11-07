@@ -1,2 +1,2 @@
-pub mod user_model;
-pub mod task_model;
+pub mod user;
+pub mod task;
