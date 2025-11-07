@@ -1,5 +1,5 @@
-pub mod task_repository;
+pub mod traits;
 pub mod user_repository;
-mod traits;
+pub mod task_repository;
 
-pub use traits::{TaskRepository, UserRepository};
+pub use traits::{UserRepository, TaskRepository};

@@ -4,6 +4,8 @@ use crate::{db::mongo_connector::MongoConnector, models::user::User};
 use crate::repository::traits::UserRepository;
 use async_trait::async_trait;
 
+use crate::models::user::{NewUser};
+use crate::models::task::{NewTask, Task};
 pub struct MongoUserRepo {
     col: Collection<User>,
 }
@@ -18,16 +20,16 @@ impl MongoUserRepo {
 
 #[async_trait]
 impl UserRepository for MongoUserRepo {
-    async fn create_user(&self, mut user: User) -> Result<ObjectId>{
-        let res = self.col.insert_one(&user, None).await?;
-        let id = res.inserted_id().as_object_id().ok_or_else(
+    async fn create_user(&self, mut user: NewUser) -> Result<ObjectId>{
+        let res = self.col.insert_one(&user).await?;
+        let id = res.inserted_id.as_object_id().ok_or_else(
             || anyhow::anyhow!("Inserted_id not an ObjectID")
         )?;
         user.id = Some(id);
         Ok(id)
     }
     async fn get_user(&self, id: ObjectId) -> Result<Option<User>> {
-        let user = self.col.find_one(doc! {"_id": id}, None).await?;
+        let user = self.col.find_one(doc! {"_id": id}).await?;
         Ok(user)
     }
 }

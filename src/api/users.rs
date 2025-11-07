@@ -13,15 +13,17 @@ use serde::{
     Serialize,
     Deserialize
 };
-
 use derive_more::{Display};
-#[derive(Deserialize, Serialize)]
-pub struct TaskIdentifier {
-    task_id: String,
 
+
+#[derive(Deserialize, Serialize)]
+pub struct SignUpIndentifier {
+    name: String,
+    email: String,
+    password: String,
 }
 
-#[get("/task/{task_id}")]
-pub async fn get_tasks(task_id: Path<TaskIdentifier>) -> Json<String> {
-    return Json(task_id.into_inner().task_id)
+#[post("/auth/signup")]
+pub async fn sign_up(body: Json<SignUpIndentifier>) -> Json<String>{
+    
 }
