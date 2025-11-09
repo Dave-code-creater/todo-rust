@@ -1,11 +1,13 @@
 use anyhow::Result;
-use mongodb::{bson::{doc, oid::ObjectId}, Collection};
-use crate::{db::mongo_connector::MongoConnector, models::user::User};
-use crate::repository::traits::UserRepository;
 use async_trait::async_trait;
+use mongodb::{bson::{doc, oid::ObjectId}, Collection};
+use crate::{
+    db::mongo_connector::MongoConnector,
+    models::user::{NewUser, User},
+    repository::traits::UserRepository,
+};
 
-use crate::models::user::{NewUser};
-use crate::models::task::{NewTask, Task};
+
 pub struct MongoUserRepo {
     col: Collection<User>,
 }
@@ -28,7 +30,7 @@ impl UserRepository for MongoUserRepo {
         user.id = Some(id);
         Ok(id)
     }
-    async fn get_user(&self, id: ObjectId) -> Result<Option<User>> {
+    async fn get_user(&self, id: &ObjectId) -> Result<Option<User>> {
         let user = self.col.find_one(doc! {"_id": id}).await?;
         Ok(user)
     }

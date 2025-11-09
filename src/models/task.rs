@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
 pub struct NewTask {
-    pub title: String,
     pub user_id: ObjectId,
+    pub title: Option<String>,
     pub description: Option<String>, 
     pub is_completed: Option<bool>,
     pub due_date: Option<DateTime>,
@@ -24,4 +24,13 @@ pub struct Task {
     pub create_date: DateTime,
     pub edit_date: DateTime,
     pub user_id: ObjectId,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateTask {
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub is_completed: Option<bool>,
+    pub due_date: Option<DateTime>,
+    pub edit_date: Option<DateTime>,
 }
