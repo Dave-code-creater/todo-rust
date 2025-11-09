@@ -15,13 +15,10 @@ use serde::{
 };
 use derive_more::{Display};
 
+use crate::repository::
 
-#[derive(Deserialize, Serialize)]
-pub struct SignUpIndentifier {
-    name: String,
-    email: String,
-    password: String,
-}
+
+
 
 #[post("/auth/signup")]
 pub async fn sign_up(body: Json<SignUpIndentifier>) -> Json<String>{

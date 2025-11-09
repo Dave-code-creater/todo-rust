@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use crate::repository::traits::UserRepository;
-use crate::models::user::User;
+use crate::models::user::{NewUser, User};
+use mongodb::bson::oid::ObjectId;
 
 pub struct UserService {
     repo: Arc<dyn UserRepository + Send + Sync>,
@@ -11,14 +12,19 @@ impl UserService {
         Self { repo }
     }
 
-    pub async fn register(&self, user: User) -> Result<User, String> {
+    pub async fn create_user(&self, user: NewUser) -> Result<User> {
         match self.repo.create_user(user.clone()).await {
             Ok(id) => {
-                user.id = Some(id);
-                Ok(user)
+                let user = User {
+                    id: Some(id),
+                    username: user.name,
+                    email: 
+                }
             }
             Err(e) => Err(e)
         }
     }
+
+    pub async fn get_user(&self, id: &ObjectId) -> Result<User, String
 }
 
