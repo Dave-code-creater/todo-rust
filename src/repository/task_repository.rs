@@ -27,10 +27,21 @@ impl MongoTaskRepo{
 
 #[async_trait]
 impl TaskRepository for MongoTaskRepo {
-    async fn create_tasks(&self, mut task: NewTask) -> Result<ObjectId> {
+    async fn create_tasks(&self, new_task: NewTask, user_id: ObjectId) -> Result<ObjectId> {
+        let now = mongodb::bson::DateTime::now();
+        let task = Task {
+            id: None,
+            user_id: user_id,
+            title: new_task.title,
+            description: new_task.description,
+            is_completed: false,
+            due_date: new_task.due_date,
+            create_date: now,
+            edit_date: now,
+        };
+
         let res = self.col.insert_one(&task).await?;
-        let id = res.inserted_id.as_object_id().ok_or_else(|| anyhow::anyhow!("Inserted_id not an ObjectId"))?;
-        task.id = Some(id);
+        let id = res.inserted_id.as_object_id().unwrap();
         Ok(id)
     }
 
@@ -60,20 +71,14 @@ impl TaskRepository for MongoTaskRepo {
             .return_document(ReturnDocument::After)
             .build();
 
-        let updated = self
-            .col
-            .find_one_and_update(
-                doc! { "_id": task_id },
-                doc! { "$set": update_doc },
-            )
-            .with_options(opts)
-            .await?;
+        let updated: Option<Task> = self
+        .col
+        .find_one_and_update(
+            doc! { "_id": task_id },
+            doc! { "$set": update_doc },
+        ).with_options(opts)
+        .await?;
 
-        if let Some(doc) = updated {
-            let task: Task = mongodb::bson::from_document(doc)?;
-            Ok(Some(task))
-        } else {
-            Ok(None)
-        }
+    Ok(updated)
     }
 }

@@ -13,7 +13,7 @@ pub trait UserRepository: Send + Sync {
 
 #[async_trait]
 pub trait TaskRepository: Send + Sync {
-    async fn create_tasks(&self, tasks: NewTask) -> Result<ObjectId>;
+    async fn create_tasks(&self, new_task: NewTask, user_id: ObjectId) -> Result<ObjectId>;
     async fn list_tasks_by_user(&self, user_id: ObjectId) -> Result<Vec<Task>>;
     async fn update_task(&self, task_id: ObjectId, tasks: UpdateTask) -> Result<Option<Task>>;
 }

@@ -14,7 +14,7 @@ pub struct User {
     pub id: Option<ObjectId>,
     pub username: String,
     pub email: String,
-    pub password_hash: String,
+    pub password: String,
     #[serde(default)]
     pub task_ids: Vec<ObjectId>,
 }

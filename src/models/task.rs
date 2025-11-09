@@ -1,15 +1,14 @@
 use mongodb::bson::{oid::ObjectId, DateTime};
 use serde::{Deserialize, Serialize};
 
-/// Incoming payload when creating a task
 #[derive(Debug, Deserialize)]
 pub struct NewTask {
     pub title: String,
     pub description: String,
-    pub due_date: Option<DateTime>,
+    pub due_date: DateTime,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateTask {
     pub title: Option<String>,
     pub description: Option<String>,
@@ -25,7 +24,7 @@ pub struct Task {
     pub title: String,
     pub description: String,
     pub is_completed: bool,
-    pub due_date: Option<DateTime>,
+    pub due_date: DateTime,
     pub create_date: DateTime,
     pub edit_date: DateTime,
 }
