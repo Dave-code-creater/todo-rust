@@ -1,21 +1,30 @@
 use mongodb::{Client, Database, options::ClientOptions};
 use anyhow::Result;
 
+#[derive(Clone)]
 pub struct MongoConnector {
     client: Client,
     db: Database,
 }
 
 impl MongoConnector {
-    pub async fn new(uri: &str, db_name: &str) -> Result<Self> {
+    pub async fn new(uri: &str) -> Result<Self> {
         let opts = ClientOptions::parse(uri).await?;
-        let client = Client::with_options(opts)?;
-        let db = client.database(db_name);
+        let client = Client::with_options(opts.clone())?;
+        let db_name = opts
+            .default_database
+            .clone()
+            .expect("Database name must be included in the Mongo URI");
 
-        Ok(Self {client, db})
+        let db = client.database(&db_name);
+
+        Ok(Self { client, db })
     }
 
     pub fn db(&self) -> &Database {
         &self.db
+    }
+    pub fn client(&self) -> &Client {
+        &self.client
     }
 }

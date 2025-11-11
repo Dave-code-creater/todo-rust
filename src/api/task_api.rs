@@ -6,6 +6,7 @@ use actix_web::{
     web::Path,
     web::Json,
     web::Data,
+    web,
     HttpResponse,
     http::{header::ContentType, StatusCode}
 };
@@ -24,4 +25,8 @@ pub struct TaskIdentifier {
 #[get("/task/{task_id}")]
 pub async fn get_tasks(task_id: Path<TaskIdentifier>) -> Json<String> {
     return Json(task_id.into_inner().task_id)
+}
+
+pub fn init(cfg: &mut web::ServiceConfig) {
+    cfg.service(get_tasks);
 }
