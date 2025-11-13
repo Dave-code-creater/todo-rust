@@ -47,6 +47,11 @@ impl UserService {
         })
     }
 
+    pub async fn get_users(&self) -> Result<Vec<User>> {
+        let users: Vec<User> = self.repo.get_all_users().await?;
+        Ok(users)
+    }
+
     
 }
 

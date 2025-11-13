@@ -1,9 +1,9 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use mongodb::{bson::{doc, oid::ObjectId}, Collection};
+use futures::TryStreamExt;
+use mongodb::{bson::{doc, oid::ObjectId}, Collection, Database};
 use crate::{
-    db::mongo_connector::MongoConnector,
-    models::user::{NewUser, User},
+    models::user::{User, UserResponse},
     repository::traits::UserRepository,
 };
 
@@ -13,9 +13,9 @@ pub struct MongoUserRepo {
 }
 
 impl MongoUserRepo {
-    pub fn new(conn: &MongoConnector) -> Self {
-        let col = conn.db().collection::<User>("users");
-        Self {col}
+    pub fn new(db: &Database) -> Self {
+        let col = db.collection::<User>("users");
+        Self { col }
     }
 }
 
@@ -31,7 +31,13 @@ impl UserRepository for MongoUserRepo {
         Ok(id)
     }
 
-    async fn get_user(&self, id: &ObjectId) -> Result<Option<User>> {
+    async fn get_all_users(&self) -> Result<Vec<User>> {
+        let cursor = self.col.find(doc! {}).await?;
+        let users: Vec<User> = cursor.try_collect().await?;
+        Ok(users)
+    }
+
+    async fn get_user_by_id(&self, id: &ObjectId) -> Result<Option<User>> {
         let user = self.col.find_one(doc! { "_id": id }).await?;
         Ok(user)
     }

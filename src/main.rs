@@ -3,14 +3,14 @@ mod db;
 mod models;
 mod repository;
 mod services;
-
+use env_logger::Env;
 use actix_web::{App, HttpServer, web};
 use dotenvy::dotenv;
-use std::env;
-
+use std::{env, sync::Arc};
+use actix_web::middleware::Logger;
 use crate::db::mongo_connector::MongoConnector;
+use crate::repository::user_repository::MongoUserRepo;
 use crate::services::user_service::UserService;
-use crate::services::{user_service};
 
 #[derive(Clone)]
 pub struct AppState {
@@ -21,16 +21,27 @@ pub struct AppState {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
+
     let mongo_uri = env::var("MONGOURI").expect("MONGOURI not set");
-    let connector = MongoConnector::new(&mongo_uri)
+    env_logger::init_from_env(
+            Env::default().default_filter_or("debug")
+        );    let mongo = MongoConnector::new(&mongo_uri)
         .await
         .expect("Failed to connect to MongoDB");
 
-    // Make it shareable for all routes
-    let connector_data = web::Data::new(connector);
+    let user_repo = Arc::new(MongoUserRepo::new(mongo.db()));
+
+    let user_service = UserService::new(user_repo);
+
+    let state = web::Data::new(AppState {
+        mongo,
+        user_service,
+    });
+
     HttpServer::new(move || {
         App::new()
-            .app_data(connector_data.clone())
+            .wrap(Logger::new("%a %{User-Agent}i"))
+            .app_data(state.clone())
             .configure(api::init)
     })
     .bind(("localhost", 8080))?

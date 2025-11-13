@@ -1,10 +1,12 @@
-use actix_web::{get,  web, HttpResponse};
-use crate::services::user_service;
-
+use actix_web::{HttpResponse, get, web};
+use crate::{AppState, models::user::UserResponse, services::user_service};
+use crate::models::user::User;
 #[get("/")]
-async fn list_users() -> HttpResponse {
-    user_servi
-    HttpResponse::Ok().json("Hello world")
+async fn list_users(state: web::Data<AppState>) -> HttpResponse {
+    match state.user_service.get_users().await {
+        Ok(user) => HttpResponse::Ok().json(user),
+        Err(e) => HttpResponse::BadRequest().body(e.to_string()),
+    }
 }
 
 pub fn init(cfg: &mut web::ServiceConfig) {

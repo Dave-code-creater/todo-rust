@@ -1,27 +1,24 @@
-// External crate imports
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::stream::StreamExt;
 use mongodb::{
     bson::{doc, oid::ObjectId, to_document},
     options::{FindOneAndUpdateOptions, ReturnDocument},
-    Collection
+    Collection, Database
 };
-
 use crate::{
-    db::mongo_connector::MongoConnector,
     models::task::{NewTask, Task, UpdateTask},
     repository::traits::TaskRepository,
 };
 
 pub struct MongoTaskRepo {
-    col: Collection<Task>
+    col: Collection<Task>,
 }
 
-impl MongoTaskRepo{
-    pub fn new(conn: &MongoConnector) -> Self {
-        let col = conn.db().collection::<Task>("tasks");
-        Self {col}
+impl MongoTaskRepo {
+    pub fn new(db: &Database) -> Self {
+        let col = db.collection::<Task>("tasks");
+        Self { col }
     }
 }
 
