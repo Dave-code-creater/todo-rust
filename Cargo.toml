@@ -17,5 +17,5 @@ async-trait = "0.1.74"
 futures = "0.3"
 mongodb = "3.3.0"
 bcrypt = "0.17.1"
-validator = "0.20.0"
+validator = { version = "0.20.0", features = ["derive"] }
 dotenvy = "0.15.7"
