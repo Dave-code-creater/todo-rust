@@ -1,10 +1,17 @@
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
+use validator::Validate;
 
-#[derive(Debug, Deserialize)]
+
+#[derive(Debug, Deserialize,Serialize, Validate)]
 pub struct NewUser {
+    #[validate(length(min = 3, message = "username must be at least 3 characters"))]
     pub username: String,
+
+    #[validate(email(message = "Invalid email address"))]
     pub email: String,
+
+    #[validate(length(min = 8, message = "password must be at least 8 characters"))]
     pub password: String,
 }
 
@@ -19,9 +26,3 @@ pub struct User {
     pub task_ids: Vec<ObjectId>,
 }
 
-#[derive(Debug, Serialize)]
-pub struct UserResponse {
-    pub id: String,
-    pub username: String,
-    pub email: String,
-}

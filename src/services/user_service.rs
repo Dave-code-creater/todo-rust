@@ -3,6 +3,7 @@ use crate::repository::traits::UserRepository;
 use crate::models::user::{NewUser, User, UserResponse};
 use bcrypt::{hash, DEFAULT_COST};
 use anyhow::Result;
+use mongodb::bson::oid::ObjectId;
 #[derive(Clone)]
 pub struct UserService {
     repo: Arc<dyn UserRepository + Send + Sync>,
@@ -50,6 +51,11 @@ impl UserService {
     pub async fn get_users(&self) -> Result<Vec<User>> {
         let users: Vec<User> = self.repo.get_all_users().await?;
         Ok(users)
+    }
+
+    pub async fn get_user(&self, id: &ObjectId) -> Result<UserResponse> {
+        let user: UserResponse = self.repo.get_user_by_id(id).await?;
+        Ok(user)
     }
 
     
