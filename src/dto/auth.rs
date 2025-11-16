@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
-use crate::dto::users::{UserResponse};
+use crate::dto::user::UserResponse;
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct RegisterRequest {

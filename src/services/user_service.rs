@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use crate::repository::traits::UserRepository;
 use crate::models::user::{NewUser, User};
-use crate::dto::user_response::UserResponse;
+use crate::dto::user::UserResponse;
 use bcrypt::{hash, DEFAULT_COST};
 use anyhow::Result;
 use mongodb::bson::oid::ObjectId;
@@ -65,4 +65,3 @@ impl UserService {
 
     
 }
-
