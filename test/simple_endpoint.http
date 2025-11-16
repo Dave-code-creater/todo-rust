@@ -11,3 +11,6 @@ Content-Type: application/json
     "email": "d1at@gmail.com",
     "password": "Oces2023@"
 }
+
+###
+GET http://localhost:8080/users/6735084a5f2f9a7c4a11b003

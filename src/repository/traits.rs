@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use anyhow::Result;
 use mongodb::bson::oid::ObjectId;
 
-use crate::models::user::{NewUser,User, UserResponse};
+use crate::models::user::{User};
 use crate::models::task::{NewTask, Task, UpdateTask};
 
 #[async_trait]

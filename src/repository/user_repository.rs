@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use futures::TryStreamExt;
 use mongodb::{bson::{doc, oid::ObjectId}, Collection, Database};
 use crate::{
-    models::user::{User, UserResponse},
+    models::user::{User},
     repository::traits::UserRepository,
 };
 

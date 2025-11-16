@@ -3,6 +3,7 @@ mod db;
 mod models;
 mod repository;
 mod services;
+mod dto;
 use env_logger::Env;
 use actix_web::{App, HttpServer, web};
 use dotenvy::dotenv;
@@ -24,7 +25,7 @@ async fn main() -> std::io::Result<()> {
 
     let mongo_uri = env::var("MONGOURI").expect("MONGOURI not set");
     env_logger::init_from_env(
-            Env::default().default_filter_or("debug")
+            Env::default().default_filter_or("info")
         );    let mongo = MongoConnector::new(&mongo_uri)
         .await
         .expect("Failed to connect to MongoDB");

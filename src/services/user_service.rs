@@ -1,6 +1,7 @@
 use std::sync::Arc;
 use crate::repository::traits::UserRepository;
-use crate::models::user::{NewUser, User, UserResponse};
+use crate::models::user::{NewUser, User};
+use crate::dto::user_response::UserResponse;
 use bcrypt::{hash, DEFAULT_COST};
 use anyhow::Result;
 use mongodb::bson::oid::ObjectId;
@@ -54,8 +55,12 @@ impl UserService {
     }
 
     pub async fn get_user(&self, id: &ObjectId) -> Result<UserResponse> {
-        let user: UserResponse = self.repo.get_user_by_id(id).await?;
-        Ok(user)
+        let user = self.repo
+        .get_user_by_id(id)
+        .await?
+        .ok_or_else(|| anyhow::anyhow!("User not found"))?;
+
+        Ok(user.into())
     }
 
     
