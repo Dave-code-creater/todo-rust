@@ -1,5 +1,4 @@
 use serde::Serialize;
-use derive_more::From;
 
 use crate::models::user::User;
 

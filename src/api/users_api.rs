@@ -1,6 +1,5 @@
-use crate::dto::user_response::UserResponse;
-use crate::models::user::{NewUser, User};
-use crate::{AppState, services::user_service};
+use crate::models::user::NewUser;
+use crate::AppState;
 use actix_web::{HttpResponse, get, post, web};
 use mongodb::bson::oid::ObjectId;
 use validator::Validate;
