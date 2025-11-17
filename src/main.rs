@@ -11,12 +11,13 @@ use std::{env, sync::Arc};
 use actix_web::middleware::Logger;
 use crate::db::mongo_connector::MongoConnector;
 use crate::repository::user_repository::MongoUserRepo;
-use crate::services::user_service::UserService;
+use crate::services::{user_service::UserService, auth_service::AuthService};
 
 #[derive(Clone)]
 pub struct AppState {
     pub mongo: MongoConnector,
     pub user_service: UserService,
+    pub auth_service: AuthService
 }
 
 #[actix_web::main]
