@@ -19,3 +19,4 @@ mongodb = "3.3.0"
 bcrypt = "0.17.1"
 validator = { version = "0.20.0", features = ["derive"] }
 dotenvy = "0.15.7"
+jsonwebtoken = "10.2.0"
